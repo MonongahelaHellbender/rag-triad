@@ -63,7 +63,10 @@ python3 rag_triad.py --selftest    # prove it catches planted failures (should p
 python3 rag_triad.py sample.json   # score one {"question","context","answer"} of your own
 ```
 Env: `TRIAD_MODEL` (judge, default `llama3.2:3b`), `TRIAD_EMBED` (default `nomic-embed-text`),
-`TRIAD_SAMPLES`, `TRIAD_RELEVANCE_FLOOR`. Design rationale + honest limits: **[DESIGN.md](DESIGN.md)**.
+`TRIAD_SAMPLES`, `TRIAD_RELEVANCE_FLOOR`.
+
+📖 **The story & motivation:** [WRITEUP.md](WRITEUP.md) — why an evaluator should admit what it can't judge.
+🔧 **Design rationale + honest limits:** [DESIGN.md](DESIGN.md).
 
 ## What it deliberately does NOT do
 It doesn't pretend a judged number is certain. Groundedness is bankable (a deterministic gate); the
