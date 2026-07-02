@@ -152,8 +152,10 @@ def _verdict(text, options, default="ABSTAIN"):
     m = re.search(r"VERDICT\s*:?\s*([A-Z]+)", seg)
     if m and m.group(1) in options:
         return m.group(1)
-    for o in options:  # fallback: first option word that appears anywhere
-        if o in seg:
+    # fallback: whole-word only, longest option first — "IRRELEVANT" must never match as
+    # "RELEVANT", and "UNSUPPORTED" must never match as "SUPPORTED" (that would fail OPEN)
+    for o in sorted(options, key=len, reverse=True):
+        if re.search(rf"\b{o}\b", seg):
             return o
     return default
 
