@@ -333,7 +333,13 @@ def _check(name, cv, gv, av):
     if "fabricated" in name:
         return gv == "FAIL", "HARD: deterministic gate must catch the fake citation"
     if "irrelevant context" in name:
-        return cv in ("IRRELEVANT", "PARTIAL", "ABSTAIN"), "must not confidently call irrelevant context relevant"
+        # Leg INDEPENDENCE: the answer here is faithful to the (irrelevant) context, so groundedness
+        # must PASS even while context-relevance flags — passing one leg must not mask, or be dragged
+        # down by, another. The answer also ignores the question, so the answer leg must flag it.
+        return (cv in ("IRRELEVANT", "PARTIAL", "ABSTAIN")
+                and gv == "PASS"
+                and av in ("IRRELEVANT", "PARTIAL", "ABSTAIN")), \
+            "legs independent: context flagged + faithful answer stays grounded + answer flagged off-question"
     if "off-topic" in name:
         return av in ("IRRELEVANT", "PARTIAL", "ABSTAIN") and gv == "PASS", "grounded, but must flag the answer as evasive"
     if "refusal" in name:
