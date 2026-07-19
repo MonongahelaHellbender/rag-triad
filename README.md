@@ -43,9 +43,20 @@ A single "is it good?" score can't tell a retrieval bug from a hallucination fro
 The triad can — **#1 fails → retrieval; #2 fails → generation; #3 fails → the prompt.**
 
 ## What makes it trustworthy (not just another triad)
-The triad framing is standard ([TruLens](https://www.trulens.org/), [RAGAS](https://docs.ragas.io/)).
-The contribution here is the **discipline** layered on top — every leg leans on a *deterministic*
-signal, not the whim of a judge model:
+The triad framing is standard ([TruLens](https://www.trulens.org/), [RAGAS](https://docs.ragas.io/)),
+and so is the discipline layered on top — **none of it is claimed as new here**:
+
+- *Cite-and-verify groundedness with abstention* is **GopherCite** (Menick et al., DeepMind 2022):
+  the model emits a quote in a parseable syntax, code confirms it is verbatim from the source, and
+  the system declines rather than answer unsupported.
+- *Deterministic, non-LLM groundedness* by verbatim matching is **verbatimeter**'s whole design.
+- *Validating the evaluator with planted failures* is **GroUSE** (Muller et al. 2024) — 144 curated
+  unit tests instantiating named generator failure modes — and, generally, **mutation testing**
+  (DeMillo, Lipton & Sayward 1978): you validate a checking apparatus by planting known defects and
+  confirming it catches them.
+
+What this repo is: a small, readable, zero-dependency assembly of those conventions where every leg
+leans on a *deterministic* signal rather than the whim of a judge model:
 
 - **Fail-closed groundedness.** The model must cite a quote; **code** — not the model — verifies the quote
   is really in the context. A fabricated citation can't pass as "grounded"; the worst case is an honest DEFER.
